@@ -182,7 +182,7 @@ $user->getMutualFriends($otherUser, $perPage = 20);
 #### Get friends using advanced paginated and scoped status
 
 ```php
-// Methods usages (Status available: pending, denied, blocked and accepted.)
+// Methods usages (Status available: pending, denied, blocked and accepted.) (Paginators available: none, default, simple)
 $user->{status}Friends($resultsPerPage = 0, $paginationType = 'none');
 
 // Example #1: (Get accepted friends using default paginator with 25 results per page).
