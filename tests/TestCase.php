@@ -11,6 +11,7 @@ abstract class TestCase extends BaseTestCase
 {
     protected $userOne;
     protected $userTwo;
+    protected $userThree;
 
     public function setUp(): void
     {
@@ -24,6 +25,11 @@ abstract class TestCase extends BaseTestCase
         $userTwo = User::forceCreate([
             'name' => 'demency',
             'email' => 'example@gmail.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+        $userThree = User::forceCreate([
+            'name' => 'Jonhn Doe',
+            'email' => 'john.doe@gmail.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ]);
     }
