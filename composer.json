@@ -14,15 +14,12 @@
         }
     ],
     "autoload-dev": {
-        "classmap": [
-            "vendor/laravel/laravel/tests/TestCase.php"
-        ],
-        "files": [
-            "tests/helpers.php"
-        ],
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "tests/helpers.php"
+        ]
     },
     "require": {
         "php": ">=7.1.3",
