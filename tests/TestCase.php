@@ -74,5 +74,22 @@ abstract class TestCase extends BaseTestCase
             $table->string('password');
             $table->timestamps();
         });
+        $app['db']->connection()->getSchemaBuilder()->create('user_friendship_groups', function (Blueprint $table) {
+            $table->integer('friendship_id')->unsigned();
+            $table->morphs('friend');
+            $table->integer('group_id')->unsigned();
+            $table->foreign('friendship_id')
+                ->references('id')
+                ->on('friendships')
+                ->onDelete('cascade');
+            $table->unique(['friendship_id', 'friend_id', 'friend_type', 'group_id'], 'unique');
+        });
+        $app['db']->connection()->getSchemaBuilder()->create('friendships', function (Blueprint $table) {
+            $table->increments('id');
+            $table->morphs('sender');
+            $table->morphs('recipient');
+            $table->tinyInteger('status')->default(0);
+            $table->timestamps();
+        });
     }
 }
