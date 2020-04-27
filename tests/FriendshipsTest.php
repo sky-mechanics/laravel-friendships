@@ -623,7 +623,7 @@ class FriendshipsTest extends TestCase
         $sender = User::find(1);
         $recipients = [];
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             $recipients[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '61',
                 'email' => 'user' . strval($i) . '61@gmail.com',
@@ -633,7 +633,7 @@ class FriendshipsTest extends TestCase
 
         $fofs = [];
 
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $fofs[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '74',
                 'email' => 'user' . strval($i) . '74@gmail.com',
@@ -641,19 +641,25 @@ class FriendshipsTest extends TestCase
             ]);
         }
 
+        $fofs = collect($fofs);
+        $fofs->chunk(3);
+
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs as $fof) {
+            foreach ($fofs->shift() as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
             }
         }
 
-        $this->assertCount(3, $sender->getFriends());
-        $this->assertCount(9, $sender->getFriendsOfFriends());
+        $this->assertCount(2, $sender->getFriends());
+        $this->assertCount(4, $recipients[0]->getFriends());
+        $this->assertCount(3, $recipients[1]->getFriends());
+
+        $this->assertCount(5, $sender->getFriendsOfFriends());
 
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getFriendsOfFriends());
     }
@@ -666,7 +672,7 @@ class FriendshipsTest extends TestCase
         $sender = User::find(1);
         $recipients = [];
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             $recipients[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '62',
                 'email' => 'user' . strval($i) . '62@gmail.com',
@@ -676,7 +682,7 @@ class FriendshipsTest extends TestCase
 
         $fofs = [];
 
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $fofs[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '73',
                 'email' => 'user' . strval($i) . '73@gmail.com',
@@ -684,12 +690,15 @@ class FriendshipsTest extends TestCase
             ]);
         }
 
+        $fofs = collect($fofs);
+        $fofs->chunk(3);
+
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs as $fof) {
+            foreach ($fofs->shift() as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
@@ -699,6 +708,9 @@ class FriendshipsTest extends TestCase
 
         $this->assertCount(3, $sender->getMutualFriends($recipients[0]));
         $this->assertCount(3, $recipients[0]->getMutualFriends($sender));
+
+        $this->assertCount(2, $sender->getMutualFriends($recipients[1]));
+        $this->assertCount(2, $recipients[1]->getMutualFriends($sender));
 
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getMutualFriends($recipients[0]));
     }
@@ -711,7 +723,7 @@ class FriendshipsTest extends TestCase
         $sender = User::find(1);
         $recipients = [];
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             $recipients[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '63',
                 'email' => 'user' . strval($i) . '63@gmail.com',
@@ -721,20 +733,23 @@ class FriendshipsTest extends TestCase
 
         $fofs = [];
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 8; $i++) {
             $fofs[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '72',
                 'email' => 'user' . strval($i) . '72@gmail.com',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
             ]);
         }
+        
+        $fofs = collect($fofs);
+        $fofs->chunk(5);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs as $fof) {
+            foreach ($fofs->shift() as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
@@ -762,7 +777,7 @@ class FriendshipsTest extends TestCase
         $sender = User::find(1);
         $recipients = [];
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             $recipients[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '64',
                 'email' => 'user' . strval($i) . '64@gmail.com',
@@ -772,20 +787,23 @@ class FriendshipsTest extends TestCase
 
         $fofs = [];
 
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $fofs[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '71',
                 'email' => 'user' . strval($i) . '71@gmail.com',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
             ]);
         }
+        
+        $fofs = collect($fofs);
+        $fofs->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs as $fof) {
+            foreach ($fofs->shift() as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
@@ -795,5 +813,8 @@ class FriendshipsTest extends TestCase
 
         $this->assertEquals(3, $sender->getMutualFriendsCount($recipients[0]));
         $this->assertEquals(3, $recipients[0]->getMutualFriendsCount($sender));
+
+        $this->assertEquals(2, $sender->getMutualFriendsCount($recipients[1]));
+        $this->assertEquals(2, $recipients[1]->getMutualFriendsCount($sender));
     }
 }
