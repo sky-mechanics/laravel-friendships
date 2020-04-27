@@ -652,11 +652,8 @@ class FriendshipsTest extends TestCase
             }
         }
 
-        $this->assertCount(2, $sender->getFriends());
-        $this->assertCount(4, $recipients[0]->getFriends());
-        $this->assertCount(3, $recipients[1]->getFriends());
-
-        $this->assertCount(5, $sender->getFriendsOfFriends());
+        $this->assertCount(3, $sender->getFriends());
+        $this->assertCount(9, $sender->getFriendsOfFriends());
 
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getFriendsOfFriends());
     }
@@ -702,9 +699,6 @@ class FriendshipsTest extends TestCase
 
         $this->assertCount(3, $sender->getMutualFriends($recipients[0]));
         $this->assertCount(3, $recipients[0]->getMutualFriends($sender));
-
-        $this->assertCount(2, $sender->getMutualFriends($recipients[1]));
-        $this->assertCount(2, $recipients[1]->getMutualFriends($sender));
 
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getMutualFriends($recipients[0]));
     }
@@ -801,8 +795,5 @@ class FriendshipsTest extends TestCase
 
         $this->assertEquals(3, $sender->getMutualFriendsCount($recipients[0]));
         $this->assertEquals(3, $recipients[0]->getMutualFriendsCount($sender));
-
-        $this->assertEquals(2, $sender->getMutualFriendsCount($recipients[1]));
-        $this->assertEquals(2, $recipients[1]->getMutualFriendsCount($sender));
     }
 }
