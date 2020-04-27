@@ -35,7 +35,11 @@ class FriendshipsGroupsTest extends TestCase
     public function user_cannot_add_a_non_friend_to_a_group()
     {
         $sender = User::find(1);
-        $recipient = User::find(2);
+        $stranger = User::forceCreate([
+            'name' => 'user605',
+            'email' => 'user605@gmail.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
+        ]);
 
         $this->assertFalse(boolval($sender->groupFriend($stranger, 'family')));
         $this->assertCount(0, $sender->getFriends(0, 'family'));
