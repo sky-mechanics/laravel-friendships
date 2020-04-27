@@ -48,3 +48,11 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
+      
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.6.0
+        env:
+          CC_TEST_REPORTER_ID: f85424364bfe37962e05e7a1a8c7781cc214b28786ed416b6c9128176713e774
+        with:
+          coverageCommand: npm run coverage
+          debug: true
