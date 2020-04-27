@@ -644,8 +644,6 @@ class FriendshipsTest extends TestCase
         $fofs = collect($fofs);
         $fofs->chunk(3);
         
-        var_dump($fofs->shift());
-
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
