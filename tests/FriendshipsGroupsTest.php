@@ -2,40 +2,15 @@
 
 namespace Tests;
 
-use Orchestra\Testbench\TestCase;
-
 class FriendshipsGroupsTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->loadLaravelMigrations(['--database' => 'testing']);
-        $this->loadMigrationsFrom([
-            '--database' => 'testing',
-            '--path' => realpath(dirname(__DIR__).'/tests/database/migrations'),
-        ]);
-        $this->withFactories(realpath(dirname(__DIR__).'/database/factories'));
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('friendships.tables.fr_groups_pivot', 'user_friendship_groups');
-        $app['config']->set('friendships.tables.fr_pivot', 'friendships');
-        $app['config']->set('friendships.groups.acquaintances', 0);
-        $app['config']->set('friendships.groups.close_friends', 1);
-        $app['config']->set('friendships.groups.family', 2);
-    }
-
-
-
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_add_a_friend_to_a_group()
     {
-
-        $sender    = createUser();
-        $recipient = createUser();
+        $sender = User::find(1);
+        $recipient = User::find(2);
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
@@ -52,26 +27,27 @@ class FriendshipsGroupsTest extends TestCase
 
         $this->assertEquals($recipient->id, $sender->getFriends(0, 'family')->first()->id);
         $this->assertEquals($sender->id, $recipient->getFriends(0, 'acquaintances')->first()->id);
-
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_cannot_add_a_non_friend_to_a_group()
     {
+        $sender = User::find(1);
+        $recipient = User::find(2);
 
-        $sender   = createUser();
-        $stranger = createUser();
-
-        $this->assertFalse((boolean)$sender->groupFriend($stranger, 'family'));
+        $this->assertFalse(boolval($sender->groupFriend($stranger, 'family')));
         $this->assertCount(0, $sender->getFriends(0, 'family'));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_remove_a_friend_from_group()
     {
-
-        $sender    = createUser();
-        $recipient = createUser();
+        $sender = User::find(1);
+        $recipient = User::find(2);
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
@@ -88,13 +64,14 @@ class FriendshipsGroupsTest extends TestCase
         $this->assertCount(1, $recipient->getFriends(0, 'family'));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_cannot_remove_a_non_existing_friend_from_group()
     {
-
-        $sender     = createUser();
-        $recipient  = createUser();
-        $recipient2 = createUser();
+        $sender = User::find(1);
+        $recipient = User::find(2);
+        $recipient2 = User::find(3);
 
         $sender->befriend($recipient);
 
@@ -102,12 +79,13 @@ class FriendshipsGroupsTest extends TestCase
         $this->assertEquals(0, $recipient2->ungroupFriend($sender, 'acquaintances'));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_remove_a_friend_from_all_groups()
     {
-
-        $sender    = createUser();
-        $recipient = createUser();
+        $sender = User::find(1);
+        $recipient = User::find(2);
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
@@ -121,22 +99,29 @@ class FriendshipsGroupsTest extends TestCase
         $this->assertCount(0, $sender->getFriends(0, 'acquaintances'));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_friends_of_a_group()
     {
+        $sender = User::find(1);
+        $recipients = [];
 
-        $sender     = createUser();
-        $recipients = createUser([], 10);
+        for ($i = 1; $i <= 10; $i++) {
+            $recipients[] = User::forceCreate([
+                'name' => 'user' . strval($i),
+                'email' => 'user' . strval($i) . '@gmail.com',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
+            ]);
+        }
 
         foreach ($recipients as $key => $recipient) {
-
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             if ($key % 2 === 0) {
                 $sender->groupFriend($recipient, 'family');
             }
-
         }
 
         $this->assertCount(5, $sender->getFriends(0, 'family'));
@@ -144,19 +129,26 @@ class FriendshipsGroupsTest extends TestCase
     }
 
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_all_user_friendships_by_group()
     {
 
-        $sender     = createUser();
-        $recipients = createUser([], 5);
+        $sender = User::find(1);
+        $recipients = [];
 
-        foreach ($recipients as $key=>$recipient) {
+        for ($i = 1; $i <= 5; $i++) {
+            $recipients[] = User::forceCreate([
+                'name' => 'user' . strval($i) . '3',
+                'email' => 'user' . strval($i) . '3@gmail.com',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
+            ]);
+        }
 
+        foreach ($recipients as $key => $recipient) {
             $sender->befriend($recipient);
-
             if ($key < 4) {
-
                 $recipient->acceptFriendRequest($sender);
                 if ($key < 3) {
                     $sender->groupFriend($recipient, 'acquaintances');
@@ -164,15 +156,11 @@ class FriendshipsGroupsTest extends TestCase
                 else {
                     $sender->groupFriend($recipient, 'family');
                 }
-
             }
             else {
                 $recipient->denyFriendRequest($sender);
             }
-
         }
-
-        //Assertions
 
         $this->assertCount(3, $sender->getAllFriendships('acquaintances'));
         $this->assertCount(1, $sender->getAllFriendships('family'));
@@ -181,12 +169,21 @@ class FriendshipsGroupsTest extends TestCase
     }
 
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_accepted_user_friendships_by_group()
     {
+        $sender = User::find(1);
+        $recipients = [];
 
-        $sender     = createUser();
-        $recipients = createUser([], 4);
+        for ($i = 1; $i <= 4; $i++) {
+            $recipients[] = User::forceCreate([
+                'name' => 'user' . strval($i) . '2',
+                'email' => 'user' . strval($i) . '2@gmail.com',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
+            ]);
+        }
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -203,20 +200,28 @@ class FriendshipsGroupsTest extends TestCase
 
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_accepted_user_friendships_number_by_group()
     {
 
-        $sender     = createUser();
-        $recipients = createUser([], 20)->chunk(5);
+        $sender = User::find(1);
+        $recipients = [];
 
-        foreach ($recipients->shift() as $recipient) {
+        for ($i = 1; $i <= 5; $i++) {
+            $recipients[] = User::forceCreate([
+                'name' => 'user' . strval($i) . '4',
+                'email' => 'user' . strval($i) . '4@gmail.com',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
+            ]);
+        }
+
+        foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
             $sender->groupFriend($recipient, 'acquaintances');
         }
-
-        //Assertions
 
         $this->assertEquals(5, $sender->getFriendsCount('acquaintances'));
         $this->assertEquals(0, $sender->getFriendsCount('family'));
@@ -224,13 +229,21 @@ class FriendshipsGroupsTest extends TestCase
         $this->assertEquals(0, $recipient->getFriendsCount('family'));
     }
 
-
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_user_friends_by_group_per_page()
     {
+        $sender = User::find(1);
+        $recipients = [];
 
-        $sender     = createUser();
-        $recipients = createUser([], 6);
+        for ($i = 1; $i <= 6; $i++) {
+            $recipients[] = User::forceCreate([
+                'name' => 'user' . strval($i) . '1',
+                'email' => 'user' . strval($i) . '1@gmail.com',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
+            ]);
+        }
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -254,8 +267,6 @@ class FriendshipsGroupsTest extends TestCase
 
         $sender->groupFriend($recipients[4], 'family');
 
-        //Assertions
-
         $this->assertCount(2, $sender->getFriends(2, 'acquaintances'));
         $this->assertCount(4, $sender->getFriends(0, 'acquaintances'));
         $this->assertCount(4, $sender->getFriends(10, 'acquaintances'));
@@ -267,6 +278,4 @@ class FriendshipsGroupsTest extends TestCase
 
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getFriends(0, 'acquaintances'));
     }
-
-
 }
