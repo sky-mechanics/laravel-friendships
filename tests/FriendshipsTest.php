@@ -642,14 +642,14 @@ class FriendshipsTest extends TestCase
         }
 
         $fofs = collect($fofs);
-        $fofs->chunk(3);
+        $fofs = $fofs->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs as $fof) {
+            foreach ($fofs->shift() as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
             }
@@ -691,14 +691,14 @@ class FriendshipsTest extends TestCase
         }
 
         $fofs = collect($fofs);
-        $fofs->chunk(3);
+        $fofs = $fofs->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs as $fof) {
+            foreach ($fofs->shift() as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
@@ -742,14 +742,14 @@ class FriendshipsTest extends TestCase
         }
         
         $fofs = collect($fofs);
-        $fofs->chunk(5);
+        $fofs = $fofs->chunk(5);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs as $fof) {
+            foreach ($fofs->shift() as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
@@ -796,14 +796,14 @@ class FriendshipsTest extends TestCase
         }
         
         $fofs = collect($fofs);
-        $fofs->chunk(3);
+        $fofs = $fofs->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs as $fof) {
+            foreach ($fofs->shift() as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
