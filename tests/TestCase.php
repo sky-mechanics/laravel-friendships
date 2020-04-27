@@ -33,6 +33,11 @@ abstract class TestCase extends BaseTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
+        $app['config']->set('friendships.tables.fr_groups_pivot', 'user_friendship_groups');
+        $app['config']->set('friendships.tables.fr_pivot', 'friendships');
+        $app['config']->set('friendships.groups.acquaintances', 0);
+        $app['config']->set('friendships.groups.close_friends', 1);
+        $app['config']->set('friendships.groups.family', 2);
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
             'driver'   => 'sqlite',
