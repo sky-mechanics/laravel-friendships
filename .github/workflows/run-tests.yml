@@ -48,6 +48,3 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
-      
-      - name: Code Climate Coverage Action
-        uses: paambaati/codeclimate-action@v2.6.0
