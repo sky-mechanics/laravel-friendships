@@ -68,7 +68,7 @@ abstract class TestCase extends BaseTestCase
     protected function setUpDatabase($app)
     {
         $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('password');
