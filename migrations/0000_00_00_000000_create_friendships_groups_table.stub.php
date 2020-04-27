@@ -32,5 +32,4 @@ class CreateFriendshipsGroupsTable extends Migration
     public function down() {
         Schema::dropIfExists(config('friendships.tables.fr_groups_pivot'));
     }
-
 }
