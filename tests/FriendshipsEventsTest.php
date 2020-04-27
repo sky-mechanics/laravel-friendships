@@ -18,8 +18,8 @@ class FriendshipsEventsTest extends TestCase
     public function friend_request_is_sent()
     {
         Event::fake();
-        $sender = createUser();
-        $recipient = createUser();
+        $sender = $this->userOne;
+        $recipient = $this->userTwo;
         $sender->befriend($recipient);
         Event::assertDispatched(Sent::class, function ($event) use ($sender, $recipient) {
             return $event->sender->id === $sender->id && $event->recipient->id === $recipient->id;
@@ -32,12 +32,9 @@ class FriendshipsEventsTest extends TestCase
     public function friend_request_is_accepted()
     {
         Event::fake();
-        $sender    = createUser();
-        $recipient = createUser();
-
-        $recipient->befriend($sender);
+        $sender = $this->userOne;
+        $recipient = $this->userTwo;
         $sender->acceptFriendRequest($recipient);
-
         Event::assertDispatched(Accepted::class, function ($event) use ($sender, $recipient) {
             return $event->sender->id === $sender->id && $event->recipient->id === $recipient->id;
         });
@@ -49,16 +46,14 @@ class FriendshipsEventsTest extends TestCase
     public function friend_request_is_denied()
     {
         Event::fake();
-        $sender    = createUser();
-        $recipient = createUser();
-
+        $sender = $this->userOne;
+        $recipient = $this->userTwo;
+        $sender->unfriend($recipient);
         $recipient->befriend($sender);
-
         $sender->denyFriendRequest($recipient);
         Event::assertDispatched(Denied::class, function ($event) use ($sender, $recipient) {
             return $event->sender->id === $sender->id && $event->recipient->id === $recipient->id;
         });
-
     }
 
     /**
@@ -67,9 +62,8 @@ class FriendshipsEventsTest extends TestCase
     public function friend_is_blocked()
     {
         Event::fake();
-        $sender    = createUser();
-        $recipient = createUser();
-
+        $sender = $this->userOne;
+        $recipient = $this->userTwo;
         $recipient->befriend($sender);
         $sender->acceptFriendRequest($recipient);
         $sender->blockFriend($recipient);
@@ -84,9 +78,10 @@ class FriendshipsEventsTest extends TestCase
     public function friend_is_unblocked()
     {
         Event::fake();
-        $sender    = createUser();
-        $recipient = createUser();
-
+        $sender = $this->userOne;
+        $recipient = $this->userTwo;
+        $sender->unblockFriend($recipient);
+        $sender->unfriend($recipient);
         $recipient->befriend($sender);
         $sender->acceptFriendRequest($recipient);
         $sender->blockFriend($recipient);
@@ -102,8 +97,9 @@ class FriendshipsEventsTest extends TestCase
     public function friendship_is_cancelled()
     {
         Event::fake();
-        $sender    = createUser();
-        $recipient = createUser();
+        $sender = $this->userOne;
+        $recipient = $this->userTwo;
+        $sender->unfriend($recipient);
         $recipient->befriend($sender);
         $sender->acceptFriendRequest($recipient);
         $sender->unfriend($recipient);
