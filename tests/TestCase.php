@@ -9,6 +9,12 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->setUpDatabase($this->app);
+    }
+
     /**
      * @param \Illuminate\Foundation\Application $app
      *
@@ -34,5 +40,24 @@ abstract class TestCase extends BaseTestCase
             'database' => ':memory:',
             'prefix'   => '',
         ]);
+    }
+
+    /**
+     * Set up the database.
+     *
+     * @param \Illuminate\Foundation\Application $app
+     */
+    protected function setUpDatabase($app)
+    {
+        $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('username');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
     }
 }
