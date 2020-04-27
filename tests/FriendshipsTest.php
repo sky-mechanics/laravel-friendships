@@ -646,7 +646,7 @@ class FriendshipsTest extends TestCase
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs->shift() as $fof) {
+            foreach ($fofs as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
             }
@@ -692,7 +692,7 @@ class FriendshipsTest extends TestCase
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs->shift() as $fof) {
+            foreach ($fofs as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
@@ -740,7 +740,7 @@ class FriendshipsTest extends TestCase
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs->shift() as $fof) {
+            foreach ($fofs as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
@@ -791,7 +791,7 @@ class FriendshipsTest extends TestCase
             $recipient->acceptFriendRequest($sender);
 
             //add some friends to each recipient too
-            foreach ($fofs->shift() as $fof) {
+            foreach ($fofs as $fof) {
                 $recipient->befriend($fof);
                 $fof->acceptFriendRequest($recipient);
                 $fof->befriend($sender);
