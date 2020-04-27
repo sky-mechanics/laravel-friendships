@@ -4,14 +4,28 @@ namespace Tests;
 
 use Demency\Friendships\FriendshipsServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    protected $userOne;
+    protected $userTwo;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->setUpDatabase($this->app);
+        $userOne = User::forceCreate([
+            'name' => 'omatamix',
+            'email' => 'omatamix@gmail.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+        $userTwo = User::forceCreate([
+            'name' => 'demency',
+            'email' => 'example@gmail.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
     }
 
     /**
@@ -56,11 +70,8 @@ abstract class TestCase extends BaseTestCase
         $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('username');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
