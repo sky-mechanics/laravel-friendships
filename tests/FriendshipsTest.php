@@ -631,7 +631,7 @@ class FriendshipsTest extends TestCase
             ]);
         }
 
-        $fofs = []
+        $fofs = [];
 
         for ($i = 1; $i <= 3; $i++) {
             $fofs[] = User::forceCreate([
@@ -677,7 +677,7 @@ class FriendshipsTest extends TestCase
             ]);
         }
 
-        $fofs = []
+        $fofs = [];
 
         for ($i = 1; $i <= 3; $i++) {
             $fofs[] = User::forceCreate([
@@ -725,7 +725,7 @@ class FriendshipsTest extends TestCase
             ]);
         }
 
-        $fofs = []
+        $fofs = [];
 
         for ($i = 1; $i <= 5; $i++) {
             $fofs[] = User::forceCreate([
@@ -776,7 +776,7 @@ class FriendshipsTest extends TestCase
             ]);
         }
 
-        $fofs = []
+        $fofs = [];
 
         for ($i = 1; $i <= 3; $i++) {
             $fofs[] = User::forceCreate([
