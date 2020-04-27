@@ -9,46 +9,26 @@ use Demency\Friendships\Events\Denied;
 use Demency\Friendships\Events\Sent;
 use Demency\Friendships\Events\Unblocked;
 use Illuminate\Support\Facades\Event;
-use Orchestra\Testbench\TestCase;
 
 class FriendshipsEventsTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->loadLaravelMigrations(['--database' => 'testing']);
-        $this->loadMigrationsFrom([
-            '--database' => 'testing',
-            '--path' => realpath(dirname(__DIR__).'/tests/database/migrations'),
-        ]);
-        $this->withFactories(realpath(dirname(__DIR__).'/database/factories'));
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['config']->set('friendships.tables.fr_groups_pivot', 'user_friendship_groups');
-        $app['config']->set('friendships.tables.fr_pivot', 'friendships');
-        $app['config']->set('friendships.groups.acquaintances', 0);
-        $app['config']->set('friendships.groups.close_friends', 1);
-        $app['config']->set('friendships.groups.family', 2);
-    }
-
-    /** @test */
+    /**
+     * @test
+     */
     public function friend_request_is_sent()
     {
         Event::fake();
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
-
         $sender->befriend($recipient);
-
         Event::assertDispatched(Sent::class, function ($event) use ($sender, $recipient) {
             return $event->sender->id === $sender->id && $event->recipient->id === $recipient->id;
         });
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friend_request_is_accepted()
     {
         Event::fake();
@@ -63,7 +43,9 @@ class FriendshipsEventsTest extends TestCase
         });
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friend_request_is_denied()
     {
         Event::fake();
@@ -79,7 +61,9 @@ class FriendshipsEventsTest extends TestCase
 
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friend_is_blocked()
     {
         Event::fake();
@@ -94,7 +78,9 @@ class FriendshipsEventsTest extends TestCase
         });
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friend_is_unblocked()
     {
         Event::fake();
@@ -110,7 +96,9 @@ class FriendshipsEventsTest extends TestCase
         });
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friendship_is_cancelled()
     {
         Event::fake();
