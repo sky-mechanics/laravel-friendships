@@ -213,7 +213,7 @@ class FriendshipsGroupsTest extends TestCase
         $sender = User::find(1);
         $recipients = [];
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $recipients[] = User::forceCreate([
                 'name' => 'user' . strval($i) . '4',
                 'email' => 'user' . strval($i) . '4@gmail.com',
@@ -221,7 +221,10 @@ class FriendshipsGroupsTest extends TestCase
             ]);
         }
 
-        foreach ($recipients as $recipient) {
+        $recipients = collect($recipients);
+        $recipients = $recipients->chunk(5);
+
+        foreach ($recipients->shift() as $recipient) {
             $sender->befriend($recipient);
             $recipient->acceptFriendRequest($sender);
             $sender->groupFriend($recipient, 'acquaintances');
