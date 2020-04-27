@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Demency\Friendships\FriendshipsServiceProvider;
+use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
