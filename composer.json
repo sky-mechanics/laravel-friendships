@@ -30,7 +30,10 @@
     "autoload": {
         "psr-4": {
             "Demency\\Friendships\\": "src/"
-        }
+        },
+        "files": [
+            "tests/helpers.php"
+        ]
     },
     "extra": {
         "laravel": {
