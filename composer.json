@@ -32,7 +32,6 @@
             "Demency\\Friendships\\": "src/"
         },
         "files": [
-            "factories/UserFactory.php",
             "tests/helpers.php"
         ]
     },
