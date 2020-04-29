@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         $this->setUpDatabase($this->app);
-        $this->loadFactoriesFrom(__DIR__ . '/factories');
+        $this->withFactories(__DIR__ . '/factories');
     }
 
     /**
