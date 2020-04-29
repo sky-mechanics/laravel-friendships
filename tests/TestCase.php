@@ -17,6 +17,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         $this->setUpDatabase($this->app);
+        $this->loadFactoriesFrom(__DIR__ . '/factories');
         $userOne = User::forceCreate([
             'name' => 'omatamix',
             'email' => 'omatamix@gmail.com',
