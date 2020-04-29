@@ -19,8 +19,8 @@ class FriendshipsEventsTest extends TestCase
     {
         Event::fake();
 
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
@@ -36,9 +36,10 @@ class FriendshipsEventsTest extends TestCase
     {
         Event::fake();
 
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
+        $recipient->befriend($sender);
         $sender->acceptFriendRequest($recipient);
 
         Event::assertDispatched(Accepted::class, function ($event) use ($sender, $recipient) {
@@ -53,10 +54,9 @@ class FriendshipsEventsTest extends TestCase
     {
         Event::fake();
 
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
-        $sender->unfriend($recipient);
         $recipient->befriend($sender);
         $sender->denyFriendRequest($recipient);
 
@@ -72,8 +72,8 @@ class FriendshipsEventsTest extends TestCase
     {
         Event::fake();
 
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $recipient->befriend($sender);
         $sender->acceptFriendRequest($recipient);
@@ -91,11 +91,9 @@ class FriendshipsEventsTest extends TestCase
     {
         Event::fake();
 
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
-        $sender->unblockFriend($recipient);
-        $sender->unfriend($recipient);
         $recipient->befriend($sender);
         $sender->acceptFriendRequest($recipient);
         $sender->blockFriend($recipient);
@@ -113,9 +111,9 @@ class FriendshipsEventsTest extends TestCase
     {
         Event::fake();
 
-        $sender = User::find(1);
-        $recipient = User::find(2);
-        $sender->unfriend($recipient);
+        $sender = createUser();
+        $recipient = createUser();
+
         $recipient->befriend($sender);
         $sender->acceptFriendRequest($recipient);
         $sender->unfriend($recipient);
