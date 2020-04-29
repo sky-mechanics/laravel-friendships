@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
 class User extends Model implements AuthorizableContract, AuthenticatableContract
 {
-    use Friendable, Authorizable, Authenticatable;
+    use Authenticatable, Authorizable, Friendable;
 
     /**
      * The database table used by the model.
