@@ -81,8 +81,8 @@ abstract class TestCase extends BaseTestCase
             $table->timestamps();
         });
 
-        include_once __DIR__ . '/../migrations/0000_00_00_000000_create_friendships_groups_table.stub.php.php.stub';
-        include_once __DIR__ . '/../migrations/0000_00_00_000000_create_friendships_table.php';
+        include_once __DIR__ . '/../migrations/0000_00_00_000000_create_friendships_groups_table.stub.php';
+        include_once __DIR__ . '/../migrations/0000_00_00_000000_create_friendships_table.stub.php';
 
         (new \CreateFriendshipsGroupsTable())->up();
         (new \CreateFriendshipsTable())->up();
