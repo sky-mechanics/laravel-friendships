@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+include_once __DIR__ . '/../tests/helpers.php';
+
 use Demency\Friendships\FriendshipsServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Str;
