@@ -9,7 +9,7 @@
  * @return \Illuminate\Database\Eloquent\Collection|\App\User[]|\App\User
  */
 function createUser($overrides = [], $amount = 1) {
-    $users = factory(Tests\User::class, $amount)->create($overrides);
+    $users = factory(\Tests\User::class, $amount)->create($overrides);
     if (count($users) == 1) {
         return $users->first();
     }
