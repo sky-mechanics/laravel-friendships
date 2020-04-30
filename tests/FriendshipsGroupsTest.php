@@ -46,8 +46,8 @@ class FriendshipsGroupsTest extends TestCase
      */
     public function user_can_remove_a_friend_from_group()
     {
-        $sender = createUser()
-        $recipient = createUser()
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
