@@ -2,111 +2,116 @@
 
 namespace Tests;
 
-use Orchestra\Testbench\TestCase;
-
 class FriendshipsTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->loadLaravelMigrations(['--database' => 'testing']);
-        $this->loadMigrationsFrom([
-            '--database' => 'testing',
-            '--path' => realpath(dirname(__DIR__).'/tests/database/migrations'),
-        ]);
-        $this->withFactories(realpath(dirname(__DIR__).'/database/factories'));
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('friendships.tables.fr_groups_pivot', 'user_friendship_groups');
-        $app['config']->set('friendships.tables.fr_pivot', 'friendships');
-        $app['config']->set('friendships.groups.acquaintances', 0);
-        $app['config']->set('friendships.groups.close_friends', 1);
-        $app['config']->set('friendships.groups.family', 2);
-    }
-
-    /** @test */
+    /**
+     * @test
+     */
     public function friendable_can_view_own_accepted_friends()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
 
         $this->assertEquals(1, $sender->acceptedFriends()->count());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friendable_can_view_own_blocked_friends()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $recipient->blockFriend($sender);
+
         $this->assertEquals(1, $recipient->blockedFriends()->count());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friendable_can_view_own_pending_friends()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $recipient->befriend($sender);
+
         $this->assertEquals(1, $recipient->pendingFriends()->count());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friendable_can_view_own_denied_friends()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $sender->befriend($recipient);
         $recipient->denyFriendRequest($sender);
+
         $this->assertEquals(1, $sender->deniedFriends()->count());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friendable_can_get_simple_paginated_friends()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
         $friends = $sender->acceptedFriends(10, 'simple');
+
         $this->assertTrue(get_class($friends) === 'Illuminate\Pagination\Paginator');
         $this->assertEquals(1, $friends->count());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friendable_can_get_default_paginated_friends()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
         $friends = $sender->acceptedFriends(10, 'default');
+
         $this->assertTrue(get_class($friends) === 'Illuminate\Pagination\LengthAwarePaginator');
         $this->assertEquals(1, $friends->count());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function friendable_can_get_non_paginated_friends()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
         $friends = $sender->acceptedFriends();
+
         $this->assertTrue(get_class($friends) === 'Illuminate\Database\Eloquent\Collection');
         $this->assertEquals(1, $friends->count());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_send_a_friend_request()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
 
         $sender->befriend($recipient);
@@ -114,11 +119,14 @@ class FriendshipsTest extends TestCase
         $this->assertCount(1, $recipient->getFriendRequests());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_not_send_a_friend_request_if_frienship_is_pending()
     {
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $sender->befriend($recipient);
         $sender->befriend($recipient);
         $sender->befriend($recipient);
@@ -127,11 +135,12 @@ class FriendshipsTest extends TestCase
     }
 
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_send_a_friend_request_if_frienship_is_denied()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
 
         $sender->befriend($recipient);
@@ -142,17 +151,20 @@ class FriendshipsTest extends TestCase
         $this->assertCount(1, $recipient->getFriendRequests());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_remove_a_friend_request()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
 
         $sender->befriend($recipient);
+
         $this->assertCount(1, $recipient->getFriendRequests());
 
         $sender->unfriend($recipient);
+
         $this->assertCount(0, $recipient->getFriendRequests());
 
         // Can resend friend request after deleted
@@ -161,134 +173,142 @@ class FriendshipsTest extends TestCase
 
         $recipient->acceptFriendRequest($sender);
         $this->assertEquals(true, $recipient->isFriendWith($sender));
+
         // Can remove friend request after accepted
         $sender->unfriend($recipient);
+
         $this->assertEquals(false, $recipient->isFriendWith($sender));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_is_friend_with_another_user_if_accepts_a_friend_request()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
-        //send fr
+
         $sender->befriend($recipient);
-        //accept fr
         $recipient->acceptFriendRequest($sender);
 
         $this->assertTrue($recipient->isFriendWith($sender));
         $this->assertTrue($sender->isFriendWith($recipient));
-        //fr has been delete
         $this->assertCount(0, $recipient->getFriendRequests());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_is_not_friend_with_another_user_until_he_accepts_a_friend_request()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
-        //send fr
+
         $sender->befriend($recipient);
 
         $this->assertFalse($recipient->isFriendWith($sender));
         $this->assertFalse($sender->isFriendWith($recipient));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_has_friend_request_from_another_user_if_he_received_a_friend_request()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
-        //send fr
+
         $sender->befriend($recipient);
 
         $this->assertTrue($recipient->hasFriendRequestFrom($sender));
         $this->assertFalse($sender->hasFriendRequestFrom($recipient));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_has_sent_friend_request_to_this_user_if_he_already_sent_request()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
-        //send fr
+
         $sender->befriend($recipient);
 
         $this->assertFalse($recipient->hasSentFriendRequestTo($sender));
         $this->assertTrue($sender->hasSentFriendRequestTo($recipient));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_has_not_friend_request_from_another_user_if_he_accepted_the_friend_request()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
-        //send fr
+
         $sender->befriend($recipient);
-        //accept fr
+
         $recipient->acceptFriendRequest($sender);
 
         $this->assertFalse($recipient->hasFriendRequestFrom($sender));
         $this->assertFalse($sender->hasFriendRequestFrom($recipient));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_cannot_accept_his_own_friend_request()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
 
-        //send fr
         $sender->befriend($recipient);
 
         $sender->acceptFriendRequest($recipient);
         $this->assertFalse($recipient->isFriendWith($sender));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_deny_a_friend_request()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
+
         $sender->befriend($recipient);
 
         $recipient->denyFriendRequest($sender);
 
         $this->assertFalse($recipient->isFriendWith($sender));
-
-        //fr has been delete
         $this->assertCount(0, $recipient->getFriendRequests());
         $this->assertCount(1, $sender->getDeniedFriendships());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_block_another_user()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
 
         $sender->blockFriend($recipient);
 
         $this->assertTrue($recipient->isBlockedBy($sender));
         $this->assertTrue($sender->hasBlocked($recipient));
+
         //sender is not blocked by receipient
         $this->assertFalse($sender->isBlockedBy($recipient));
         $this->assertFalse($recipient->hasBlocked($sender));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_unblock_a_blocked_user()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
 
         $sender->blockFriend($recipient);
@@ -298,11 +318,12 @@ class FriendshipsTest extends TestCase
         $this->assertFalse($sender->hasBlocked($recipient));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_block_is_permanent_unless_blocker_decides_to_unblock()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
 
         $sender->blockFriend($recipient);
@@ -325,11 +346,12 @@ class FriendshipsTest extends TestCase
         $this->assertFalse($recipient->isBlockedBy($sender));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function user_can_send_friend_request_to_user_who_is_blocked()
     {
-
-        $sender    = createUser();
+        $sender = createUser();
         $recipient = createUser();
 
         $sender->blockFriend($recipient);
@@ -339,11 +361,12 @@ class FriendshipsTest extends TestCase
         $this->assertCount(1, $recipient->getFriendRequests());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_all_user_friendships()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
@@ -356,11 +379,12 @@ class FriendshipsTest extends TestCase
         $this->assertCount(3, $sender->getAllFriendships());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_accepted_user_friendships_number()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
@@ -373,11 +397,12 @@ class FriendshipsTest extends TestCase
         $this->assertEquals(2, $sender->getFriendsCount());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_accepted_user_friendships()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
@@ -390,11 +415,12 @@ class FriendshipsTest extends TestCase
         $this->assertCount(2, $sender->getAcceptedFriendships());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_only_accepted_user_friendships()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 4);
 
         foreach ($recipients as $recipient) {
@@ -412,11 +438,12 @@ class FriendshipsTest extends TestCase
         $this->assertCount(0, $recipients[3]->getAcceptedFriendships());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_pending_user_friendships()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
@@ -427,11 +454,12 @@ class FriendshipsTest extends TestCase
         $this->assertCount(2, $sender->getPendingFriendships());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_denied_user_friendships()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
@@ -444,11 +472,12 @@ class FriendshipsTest extends TestCase
         $this->assertCount(1, $sender->getDeniedFriendships());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_blocked_user_friendships()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
@@ -461,11 +490,12 @@ class FriendshipsTest extends TestCase
         $this->assertCount(1, $sender->getBlockedFriendships());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_user_friends()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 4);
 
         foreach ($recipients as $recipient) {
@@ -484,11 +514,12 @@ class FriendshipsTest extends TestCase
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getFriends());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_user_friends_per_page()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 6);
 
         foreach ($recipients as $recipient) {
@@ -512,13 +543,14 @@ class FriendshipsTest extends TestCase
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getFriends());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_user_friends_of_friends()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 2);
-        $fofs       = createUser([], 5)->chunk(3);
+        $fofs = createUser([], 5)->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -540,13 +572,14 @@ class FriendshipsTest extends TestCase
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getFriendsOfFriends());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_user_mutual_friends()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 2);
-        $fofs       = createUser([], 5)->chunk(3);
+        $fofs = createUser([], 5)->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -570,13 +603,14 @@ class FriendshipsTest extends TestCase
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getMutualFriends($recipients[0]));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_user_mutual_friends_per_page()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 2);
-        $fofs       = createUser([], 8)->chunk(5);
+        $fofs = createUser([], 8)->chunk(5);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -603,13 +637,14 @@ class FriendshipsTest extends TestCase
         $this->containsOnlyInstancesOf(\App\User::class, $sender->getMutualFriends($recipients[0], 2));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_user_mutual_friends_number()
     {
-
-        $sender     = createUser();
+        $sender = createUser();
         $recipients = createUser([], 2);
-        $fofs       = createUser([], 5)->chunk(3);
+        $fofs = createUser([], 5)->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);

@@ -16,15 +16,13 @@
         <whitelist processUncoveredFilesFromWhitelist="true" addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
             <exclude>
-                <directory suffix=".php">src/config</directory>
-                <directory suffix=".php">src/database/migrations</directory>
                 <file>src/Status.php</file>
                 <file>src/FriendshipsServiceProvider.php</file>
             </exclude>
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-clover" target="clover.xml"/>
     </logging>
     <php>
         <env name="APP_ENV" value="testing"/>
