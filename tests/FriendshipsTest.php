@@ -9,8 +9,8 @@ class FriendshipsTest extends TestCase
      */
     public function friendable_can_view_own_accepted_friends()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
@@ -23,8 +23,8 @@ class FriendshipsTest extends TestCase
      */
     public function friendable_can_view_own_blocked_friends()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $recipient->blockFriend($sender);
 
@@ -36,8 +36,8 @@ class FriendshipsTest extends TestCase
      */
     public function friendable_can_view_own_pending_friends()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $recipient->befriend($sender);
 
@@ -49,8 +49,8 @@ class FriendshipsTest extends TestCase
      */
     public function friendable_can_view_own_denied_friends()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $recipient->denyFriendRequest($sender);
@@ -63,8 +63,8 @@ class FriendshipsTest extends TestCase
      */
     public function friendable_can_get_simple_paginated_friends()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
@@ -79,8 +79,8 @@ class FriendshipsTest extends TestCase
      */
     public function friendable_can_get_default_paginated_friends()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
@@ -95,8 +95,8 @@ class FriendshipsTest extends TestCase
      */
     public function friendable_can_get_non_paginated_friends()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
@@ -111,8 +111,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_can_send_a_friend_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
@@ -124,8 +124,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_can_not_send_a_friend_request_if_frienship_is_pending()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $sender->befriend($recipient);
@@ -140,8 +140,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_can_send_a_friend_request_if_frienship_is_denied()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $recipient->denyFriendRequest($sender);
@@ -156,8 +156,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_can_remove_a_friend_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
@@ -185,8 +185,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_is_friend_with_another_user_if_accepts_a_friend_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
         $recipient->acceptFriendRequest($sender);
@@ -201,8 +201,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_is_not_friend_with_another_user_until_he_accepts_a_friend_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
@@ -215,8 +215,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_has_friend_request_from_another_user_if_he_received_a_friend_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
@@ -229,8 +229,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_has_sent_friend_request_to_this_user_if_he_already_sent_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
@@ -243,8 +243,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_has_not_friend_request_from_another_user_if_he_accepted_the_friend_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
@@ -259,8 +259,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_cannot_accept_his_own_friend_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
@@ -290,8 +290,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_can_block_another_user()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->blockFriend($recipient);
 
@@ -308,8 +308,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_can_unblock_a_blocked_user()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->blockFriend($recipient);
         $sender->unblockFriend($recipient);
@@ -323,8 +323,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_block_is_permanent_unless_blocker_decides_to_unblock()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->blockFriend($recipient);
         $this->assertTrue($recipient->isBlockedBy($sender));
@@ -351,8 +351,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_can_send_friend_request_to_user_who_is_blocked()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->blockFriend($recipient);
         $sender->befriend($recipient);
@@ -366,16 +366,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_all_user_friendships()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 3; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '54',
-                'email' => 'user' . strval($i) . '54@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -392,16 +384,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_accepted_user_friendships_number()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 3; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '53',
-                'email' => 'user' . strval($i) . '53@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -418,16 +402,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_accepted_user_friendships()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 3; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '52',
-                'email' => 'user' . strval($i) . '52@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -444,16 +420,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_only_accepted_user_friendships()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 4; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '51',
-                'email' => 'user' . strval($i) . '51@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 4);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -475,16 +443,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_pending_user_friendships()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 3; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '9',
-                'email' => 'user' . strval($i) . '9@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -499,16 +459,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_denied_user_friendships()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 3; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '8',
-                'email' => 'user' . strval($i) . '8@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -525,16 +477,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_blocked_user_friendships()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 3; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '7',
-                'email' => 'user' . strval($i) . '7@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -551,16 +495,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_user_friends()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 4; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '6',
-                'email' => 'user' . strval($i) . '6@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 4);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -583,16 +519,8 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_user_friends_per_page()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 6; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '5',
-                'email' => 'user' . strval($i) . '5@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
+        $sender = createUser();
+        $recipients = createUser([], 6);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -620,29 +548,9 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_user_friends_of_friends()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 2; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '61',
-                'email' => 'user' . strval($i) . '61@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
-
-        $fofs = [];
-
-        for ($i = 1; $i <= 5; $i++) {
-            $fofs[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '74',
-                'email' => 'user' . strval($i) . '74@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
-
-        $fofs = collect($fofs);
-        $fofs = $fofs->chunk(3);
+        $sender = createUser();
+        $recipients = createUser([], 2);
+        $fofs = createUser([], 5)->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -669,29 +577,9 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_user_mutual_friends()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 2; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '62',
-                'email' => 'user' . strval($i) . '62@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
-
-        $fofs = [];
-
-        for ($i = 1; $i <= 5; $i++) {
-            $fofs[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '73',
-                'email' => 'user' . strval($i) . '73@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
-
-        $fofs = collect($fofs);
-        $fofs = $fofs->chunk(3);
+        $sender = createUser();
+        $recipients = createUser([], 2);
+        $fofs = createUser([], 5)->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -720,29 +608,9 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_user_mutual_friends_per_page()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 2; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '63',
-                'email' => 'user' . strval($i) . '63@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
-
-        $fofs = [];
-
-        for ($i = 1; $i <= 8; $i++) {
-            $fofs[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '72',
-                'email' => 'user' . strval($i) . '72@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
-        
-        $fofs = collect($fofs);
-        $fofs = $fofs->chunk(5);
+        $sender = createUser();
+        $recipients = createUser([], 2);
+        $fofs = createUser([], 8)->chunk(5);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
@@ -774,29 +642,9 @@ class FriendshipsTest extends TestCase
      */
     public function it_returns_user_mutual_friends_number()
     {
-        $sender = User::find(1);
-        $recipients = [];
-
-        for ($i = 1; $i <= 2; $i++) {
-            $recipients[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '64',
-                'email' => 'user' . strval($i) . '64@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
-
-        $fofs = [];
-
-        for ($i = 1; $i <= 5; $i++) {
-            $fofs[] = User::forceCreate([
-                'name' => 'user' . strval($i) . '71',
-                'email' => 'user' . strval($i) . '71@gmail.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',               
-            ]);
-        }
-        
-        $fofs = collect($fofs);
-        $fofs = $fofs->chunk(3);
+        $sender = createUser();
+        $recipients = createUser([], 2);
+        $fofs = createUser([], 5)->chunk(3);
 
         foreach ($recipients as $recipient) {
             $sender->befriend($recipient);
