@@ -273,8 +273,8 @@ class FriendshipsTest extends TestCase
      */
     public function user_can_deny_a_friend_request()
     {
-        $sender = User::find(1);
-        $recipient = User::find(2);
+        $sender = createUser();
+        $recipient = createUser();
 
         $sender->befriend($recipient);
 
