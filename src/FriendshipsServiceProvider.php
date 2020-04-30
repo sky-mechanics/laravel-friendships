@@ -13,6 +13,9 @@ class FriendshipsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (class_exists('CreateFriendshipsTable') || class_exists('CreateFriendshipsGroupsTable')) {
+            return;
+        }
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
         $this->publishes([
             __DIR__ . '/../migrations/0000_00_00_000000_create_friendships_table.stub.php'        => database_path('migrations') . date('Y_m_d_His', time()) . '_create_friendships_table.php',
