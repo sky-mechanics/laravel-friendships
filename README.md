@@ -1,4 +1,4 @@
-# Laravel 6/7 Friendships Package
+# Laravel ^5.8/^6.0/^7.0 Friendships Package
 
 [![Laravel Friendships](https://github.com/demency/laravel-friendships/workflows/Laravel%20Friendships/badge.svg)](https://github.com/demency/laravel-friendships/actions?query=workflow%3A%22Laravel+Friendships%22)
 [![codecov](https://codecov.io/gh/demency/laravel-friendships/branch/master/graph/badge.svg)](https://codecov.io/gh/demency/laravel-friendships)
